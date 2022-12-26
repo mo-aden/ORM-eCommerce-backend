@@ -58,8 +58,7 @@ router.post("/", async (req, res) => {
       return res.status(200).json(productTagIds);
     }
   } catch (error) {
-    // console.log(error);
-    console.log(req.body);
+    console.log(error);
     res.status(400).json(error);
   }
 });
@@ -96,7 +95,7 @@ router.put("/:id", (req, res) => {
     })
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
-      // console.log(err);
+      console.log(err);
       res.status(400).json(err);
     });
 });
