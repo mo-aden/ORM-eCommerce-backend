@@ -41,6 +41,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const productData = await Product.create(req.body);
+    console.log(req.body);
 
     if (req.body.tagIds.length) {
       //Map through req.body.tagIds
@@ -54,10 +55,11 @@ router.post("/", async (req, res) => {
       //return newArr for whats in req.body.tagId
       const productTagIds = await ProductTag.bulkCreate(productTagIdNewArr);
 
-      res.status(200).json(productTagIds);
+      return res.status(200).json(productTagIds);
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    console.log(req.body);
     res.status(400).json(error);
   }
 });
@@ -99,15 +101,19 @@ router.put("/:id", (req, res) => {
     });
 });
 
-router.delete("/:id", async (req, res) => {
-  // delete one product by its `id` value
-  const newProduct = await Product.destroy({
+// delete one product by its `id` value
+router.delete("/:id", (req, res) => {
+  Product.destroy({
     where: {
       id: req.params.id,
     },
-  });
+  })
+    .then((updatedProductTags) => res.json(updatedProductTags))
+    .catch((err) => {
+      res.status.json(err);
+    });
 
-  res.send("Product successfully deleted ✅");
+  // res.send("Product successfully deleted ✅");
 });
 
 module.exports = router;
